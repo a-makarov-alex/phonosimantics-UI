@@ -7,7 +7,7 @@
       class="meanings"
     >
       <li class="meaning-item">
-        <h3>{{ meaning.definition }}</h3>
+        <h3>{{ meaning }}</h3>
       </li>
     </ul>
     <div>
@@ -27,6 +27,7 @@
     },
     created() {
       this.$store.dispatch('loadLanguage')
+      this.$store.dispatch('loadMeanings')
     }
   }
 </script>

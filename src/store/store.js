@@ -13,14 +13,17 @@ export const store = new Vuex.Store({
   state: {
     language: '',
     meanings: [
-      {definition: 'def1'},
+      /*{definition: 'def1'},
       {definition: 'def2'},
-      {definition: 'def3'}
+      {definition: 'def3'}*/
     ]
   },
   mutations: {
     SAVE_LANGUAGE (state, language) {
       state.language = language
+    },
+    SAVE_MEANINGS (state, meanings) {
+      state.meanings = meanings
     }
   },
   actions: {
@@ -28,6 +31,13 @@ export const store = new Vuex.Store({
       Vue.axios.get('language').then(result => {
         commit('SAVE_LANGUAGE', result.data)
       }).catch(error => {
+        throw new Error('API ${error}')
+      })
+    },
+    loadMeanings({commit}) {
+      Vue.axios.get('meanings').then(result => {
+        commit('SAVE_MEANINGS', result.data)
+      }). catch(error => {
         throw new Error('API ${error}')
       })
     }
