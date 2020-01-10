@@ -13,17 +13,27 @@ export const store = new Vuex.Store({
   state: {
     language: '',
     meanings: [
-      /*{definition: 'def1'},
-      {definition: 'def2'},
-      {definition: 'def3'}*/
+      /*{definition: 'def1'},*/
+    ],
+    headers: [
+      {
+        row: '',
+        column: '',
+        text: '',
+        width: '',
+        height: ''
+      }
     ]
   },
   mutations: {
-    SAVE_LANGUAGE (state, language) {
+    SAVE_LANGUAGE(state, language) {
       state.language = language
     },
-    SAVE_MEANINGS (state, meanings) {
+    SAVE_MEANINGS(state, meanings) {
       state.meanings = meanings
+    },
+    SAVE_HEADERS(state, headers) {
+      state.headers = headers
     }
   },
   actions: {
@@ -37,7 +47,14 @@ export const store = new Vuex.Store({
     loadMeanings({commit}) {
       Vue.axios.get('meanings').then(result => {
         commit('SAVE_MEANINGS', result.data)
-      }). catch(error => {
+      }).catch(error => {
+        throw new Error('API ${error}')
+      })
+    },
+    loadHeaders({commit}) {
+      Vue.axios.get('headers').then(result => {
+        commit('SAVE_HEADERS', result.data)
+      }).catch(error => {
         throw new Error('API ${error}')
       })
     }
