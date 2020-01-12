@@ -5,12 +5,12 @@
 <script>
   import NormalityTableItem from './NormalityTableItem/NormalityTableItem'
 
-    export default {
-        name: "NormalityTable",
-      components: {
-          NormalityTableItem
-      }
+  export default {
+    name: "NormalityTable",
+    components: {
+      NormalityTableItem
     }
+  }
 </script>
 
 <style scoped>

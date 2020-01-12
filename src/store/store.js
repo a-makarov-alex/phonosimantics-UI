@@ -15,6 +15,13 @@ export const store = new Vuex.Store({
     meanings: [
       /*{definition: 'def1'},*/
     ],
+    wordlists: [
+      {
+        meaning: '',
+        list: [],
+        phTypeStatsMap: ''
+      }
+    ],
     headers: [
       {
         row: '',
@@ -34,6 +41,9 @@ export const store = new Vuex.Store({
     },
     SAVE_HEADERS(state, headers) {
       state.headers = headers
+    },
+    SAVE_WORDLISTS(state, wordlists) {
+      state.wordlists = wordlists
     }
   },
   actions: {
@@ -54,6 +64,13 @@ export const store = new Vuex.Store({
     loadHeaders({commit}) {
       Vue.axios.get('headers').then(result => {
         commit('SAVE_HEADERS', result.data)
+      }).catch(error => {
+        throw new Error('API ${error}')
+      })
+    },
+    loadWordlists({commit}) {
+      Vue.axios.get('wordlists').then(result => {
+        commit('SAVE_WORDLISTS', result.data)
       }).catch(error => {
         throw new Error('API ${error}')
       })

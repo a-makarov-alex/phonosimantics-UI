@@ -1,45 +1,10 @@
 <template>
   <div class="normality">
-    <!--<table border="1" cellpadding="10" cellspacing="0">
-      <tr>
-        <th rowspan="3">Semantics</th>
-        <th colspan="5">VOWELS</th>
-      </tr>
-      <tr>
-        <th colspan="5">Height</th>
-      </tr>
-      <tr>
-        <th>Open</th>
-        <th>Op-Mid</th>
-        <th>Mid</th>
-        <th>Cl-Mid</th>
-        <th>Close</th>
-      </tr>
-    </table>-->
-
     <table border="1" cellpadding="10" cellspacing="0">
       <thead id="tableHead">
-        <!--<tr
-          class="normality-row"
-          v-for="header in headers"
-          :key="header.row">
-          <th
-            :colspan="header.width">
-            {{ header.height }}
-          </th>
-        </tr>-->
       </thead>
       <tbody></tbody>
     </table>
-    <!--<ul
-      v-for="header in headers"
-      :key="header.text"
-      class="headers header"
-    >
-      <li class="headers header-item">
-        <h3>{{ header.text }}</h3>
-      </li>
-    </ul>-->
   </div>
 </template>
 
