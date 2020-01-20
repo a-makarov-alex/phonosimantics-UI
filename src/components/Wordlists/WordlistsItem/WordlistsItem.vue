@@ -2,14 +2,13 @@
   <div class="wordlists-list">
     <ul
       v-for="wordlist in wordlists"
-
     ><!--:key="wordlist.meaning"-->
       <li class="wordlists-list wordlist-item">
         <h3>{{ wordlist.meaning }}</h3>
         <ul
         v-for="list in wordlist.list"
         >
-          <li class=""wordlists-list word-item>
+          <li>
             <h4>{{list.word}}</h4>
           </li>
         </ul>

@@ -1,6 +1,7 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
+    <!-- <img src="./assets/logo.png"> -->
+    <h2>Phonosemantics-UI</h2>
     <router-view/>
   </div>
 </template>

@@ -30,7 +30,9 @@ export const store = new Vuex.Store({
         width: '',
         height: ''
       }
-    ]
+    ],
+    wordlist: {
+    }
   },
   mutations: {
     SAVE_LANGUAGE(state, language) {
@@ -44,6 +46,9 @@ export const store = new Vuex.Store({
     },
     SAVE_WORDLISTS(state, wordlists) {
       state.wordlists = wordlists
+    },
+    SAVE_WORDLIST(state, wordlist) {
+      state.wordlist = wordlist
     }
   },
   actions: {
@@ -74,6 +79,21 @@ export const store = new Vuex.Store({
       }).catch(error => {
         throw new Error('API ${error}')
       })
+    },
+    loadWordlist({commit}, params) {
+
+      Vue.axios.get('wordlist/reduced', { params: params }).then(result => {
+        commit('SAVE_WORDLIST', result.data)
+      }).catch(error => {
+        throw new Error('API ${error}')
+      })
+    }
+  },
+  computed : {
+    axiosParams() {
+      const params = new URLSearchParams();
+      params.append('meaning',);
+      return params;
     }
   }
 })

@@ -4,6 +4,8 @@ import HelloWorld from '../components/HelloWorld'
 import WordLists from '../components/MeaningsList/MeaningsList'
 import NormalityTable from '../components/NormalityTable/NormalityTable'
 import Wordlists from '../components/Wordlists/Wordlists'
+import MeaningsList from '../components/MeaningsList/MeaningsList'
+import Wordlist from '../components/Wordlist/Wordlist'
 
 Vue.use(Router)
 
@@ -15,11 +17,6 @@ export default new Router({
       component: HelloWorld
     },
     {
-      path: '/test',
-      name: 'Test',
-      component: WordLists
-    },
-    {
       path: '/normality',
       name: 'Normality',
       component: NormalityTable
@@ -28,6 +25,18 @@ export default new Router({
       path: '/wordlists',
       name: 'Wordlists',
       component: Wordlists
+    },
+    {
+      path: '/meanings',
+      name: 'Meanings',
+      component: MeaningsList
+    },
+    {
+      path: '/wordlists/:meaning',
+      name: 'Wordlist',
+      component: Wordlist
     }
-  ]
+  ],
+  watch: {
+  }
 })
