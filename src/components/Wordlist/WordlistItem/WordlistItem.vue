@@ -1,17 +1,34 @@
 <template>
   <div class="wordlist-item">
     <h4>test</h4>
+    <!-- it works as list!
     <ul
       v-for="word in wordlist.list"
     >
       <li>
-        <h4>{{word.language.title}} : {{word.graphicForm}}</h4>
+        <h4>{{word.language.title}} : {{word.graphicForm}} : {{word.transcription}}</h4>
       </li>
-    </ul>
+    </ul>-->
+
+    <table border="1" cellpadding="10" cellspacing="0">
+      <thead id="tableHead">
+      <tr>
+        <th>№</th>
+        <th>Language</th>
+        <th>GraphicForm</th>
+        <th>Transcription</th>
+      </tr>
+      </thead>
+      <tbody id="tableBody">
+
+      </tbody>
+    </table>
   </div>
 </template>
 
 <script>
+  import {store} from "../../../store/store";
+
   export default {
     name: "WordlistItem",
     computed: {
@@ -23,6 +40,27 @@
     created() {
       this.$store.dispatch('loadWordlist', this.$router.currentRoute.params)
     }
+  }
+
+  window.onload = () => {
+    loadTableData(store.state.wordlist)
+  };
+
+  function loadTableData(wordlist) {
+    const tableBody = document.getElementById('tableBody');
+    let dataHtml = '';
+    let counter = 1;
+
+    for (let word of wordlist.list) {
+      dataHtml += `<tr>`;
+      dataHtml += `<td>${counter}</td>`;
+      dataHtml += `<td>${word.language.title}</td>`;
+      dataHtml += `<td>${word.graphicForm}</td>`;
+      dataHtml += `<td>${word.transcription}</td>`;
+      dataHtml += `</tr>`;
+      counter++;
+    }
+    tableBody.innerHTML = dataHtml;
   }
 </script>
 
