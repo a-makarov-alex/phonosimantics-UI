@@ -27,13 +27,13 @@
 </template>
 
 <script>
-  import {store} from "../../../store/store";
+  import {store} from '../../../store/store'
 
   export default {
     name: "WordlistItem",
     computed: {
       wordlist() {
-        console.info(this.$store.state.wordlist)
+        console.info(this.$store.state.wordlist);
         return this.$store.state.wordlist
       }
     },
@@ -54,7 +54,7 @@
     for (let word of wordlist.list) {
       dataHtml += `<tr>`;
       dataHtml += `<td>${counter}</td>`;
-      dataHtml += `<td>${word.language.title}</td>`;
+      dataHtml += `<td><a href="http://localhost:8080/#/languages/${word.language.title}">${word.language.title}</a></td>`;
       dataHtml += `<td>${word.graphicForm}</td>`;
       dataHtml += `<td>${word.transcription}</td>`;
       dataHtml += `</tr>`;

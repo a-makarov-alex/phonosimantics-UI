@@ -6,6 +6,7 @@ import NormalityTable from '../components/NormalityTable/NormalityTable'
 import Wordlists from '../components/Wordlists/Wordlists'
 import MeaningsList from '../components/MeaningsList/MeaningsList'
 import Wordlist from '../components/Wordlist/Wordlist'
+import LanguagePage from '../components/Language/LanguagePage'
 
 Vue.use(Router)
 
@@ -35,7 +36,12 @@ export default new Router({
       path: '/wordlists/:meaning',
       name: 'Wordlist',
       component: Wordlist
-    }
+    }/*,
+    {
+      path: '/languages/:language',
+      name: 'Language',
+      component: LanguagePage
+    }*/
   ],
   watch: {
   }

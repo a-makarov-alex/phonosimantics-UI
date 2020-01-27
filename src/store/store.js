@@ -52,8 +52,8 @@ export const store = new Vuex.Store({
     }
   },
   actions: {
-    loadLanguage({commit}) {
-      Vue.axios.get('language').then(result => {
+    loadLanguage({commit}, params) {
+      Vue.axios.get('languages', { params: params }).then(result => {
         commit('SAVE_LANGUAGE', result.data)
       }).catch(error => {
         throw new Error('API ${error}')
@@ -81,7 +81,6 @@ export const store = new Vuex.Store({
       })
     },
     loadWordlist({commit}, params) {
-
       Vue.axios.get('wordlist/reduced', { params: params }).then(result => {
         commit('SAVE_WORDLIST', result.data)
       }).catch(error => {
