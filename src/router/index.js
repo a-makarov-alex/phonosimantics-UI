@@ -36,12 +36,12 @@ export default new Router({
       path: '/wordlists/:meaning',
       name: 'Wordlist',
       component: Wordlist
-    }/*,
+    },
     {
       path: '/languages/:language',
       name: 'Language',
       component: LanguagePage
-    }*/
+    }
   ],
   watch: {
   }

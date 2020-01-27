@@ -1,7 +1,7 @@
 <template>
-  <!--<div>
-    <h2>Hello</h2>
-  </div>-->
+  <div>
+    <h2>{{language.title}} Language</h2>
+  </div>
 </template>
 
 <script>
@@ -11,7 +11,6 @@
     name: "LanguageItem",
     computed: {
       language() {
-        console.info(this.$store.state.language);
         return this.$store.state.language
       }
     },

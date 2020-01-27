@@ -53,7 +53,7 @@ export const store = new Vuex.Store({
   },
   actions: {
     loadLanguage({commit}, params) {
-      Vue.axios.get('languages', { params: params }).then(result => {
+      Vue.axios.get('languages/' + params.language).then(result => {
         commit('SAVE_LANGUAGE', result.data)
       }).catch(error => {
         throw new Error('API ${error}')

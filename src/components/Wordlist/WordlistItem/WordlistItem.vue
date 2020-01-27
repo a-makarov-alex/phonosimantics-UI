@@ -1,6 +1,7 @@
 <template>
   <div class="wordlist-item">
-    <h4>test</h4>
+    <h4>Wordlist for "{{wordlist.meaning}}"</h4>
+    <button v-on:click="loadTableData(wordlist)">test</button>
     <!-- it works as list!
     <ul
       v-for="word in wordlist.list"
@@ -38,38 +39,42 @@
       }
     },
     created() {
-      this.$store.dispatch('loadWordlist', this.$router.currentRoute.params)
+      console.info("created");
+      this.$store.dispatch('loadWordlist', this.$router.currentRoute.params);
+    },
+    methods: {
+      loadTableData(wordlist) {
+        const tableBody = document.getElementById('tableBody');
+        let dataHtml = '';
+        let counter = 1;
+
+        for (let word of wordlist.list) {
+          dataHtml += `<tr>`;
+          dataHtml += `<td>${counter}</td>`;
+          dataHtml += `<td><a href="http://localhost:8080/#/languages/${word.language.title}">${word.language.title}</a></td>`;
+          dataHtml += `<td>${word.graphicForm}</td>`;
+          dataHtml += `<td>${word.transcription}</td>`;
+          dataHtml += `</tr>`;
+          counter++;
+        }
+        tableBody.innerHTML = dataHtml;
+      }
     }
   }
 
-  window.onload = () => {
-    loadTableData(store.state.wordlist)
-  };
-
-  function loadTableData(wordlist) {
-    const tableBody = document.getElementById('tableBody');
-    let dataHtml = '';
-    let counter = 1;
-
-    for (let word of wordlist.list) {
-      dataHtml += `<tr>`;
-      dataHtml += `<td>${counter}</td>`;
-      dataHtml += `<td><a href="http://localhost:8080/#/languages/${word.language.title}">${word.language.title}</a></td>`;
-      dataHtml += `<td>${word.graphicForm}</td>`;
-      dataHtml += `<td>${word.transcription}</td>`;
-      dataHtml += `</tr>`;
-      counter++;
-    }
-    tableBody.innerHTML = dataHtml;
-  }
+  // window.onload = () => {
+  // old version
+  //   loadTableData(store.state.wordlist)
+  // };
+  //
+  // function loadTableData(wordlist) {
+  // code here
+  // }
 </script>
 
 <style scoped>
-  ul {
+  ul li {
     list-style-type: none;
     padding: 0;
-  }
-
-  li {
   }
 </style>
