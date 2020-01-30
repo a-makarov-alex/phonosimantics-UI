@@ -1,12 +1,12 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import HelloWorld from '../components/HelloWorld'
-import WordLists from '../components/MeaningsList/MeaningsList'
 import NormalityTable from '../components/NormalityTable/NormalityTable'
 import Wordlists from '../components/Wordlists/Wordlists'
 import MeaningsList from '../components/MeaningsList/MeaningsList'
 import Wordlist from '../components/Wordlist/Wordlist'
 import LanguagePage from '../components/Language/LanguagePage'
+import Phonemes from '../components/Phonemes/Phonemes'
 
 Vue.use(Router)
 
@@ -41,6 +41,11 @@ export default new Router({
       path: '/languages/:language',
       name: 'Language',
       component: LanguagePage
+    },
+    {
+      path: '/phonemes',
+      name: 'Phonemes',
+      component: Phonemes
     }
   ],
   watch: {

@@ -1,5 +1,16 @@
-checklist:
-- пропадающий хедер на странице wordlist
+checklist
+COMMON
+- в ссылках захардкожен урл localhost
+- normality table переделать блок js в метод
+
+HEADER
+- в меню хедера ссылкам навесить стили
+- выходить из меню хедера по клику вне меню
+
+WORDLIST
+- пропадающий хедер таблицы на странице wordlist
+- сделать рабочим селект на странице wordlist
+
 
 
 # vue-phonosemantics3
