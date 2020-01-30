@@ -1,3 +1,7 @@
+checklist:
+- пропадающий хедер на странице wordlist
+
+
 # vue-phonosemantics3
 
 > A Vue.js project

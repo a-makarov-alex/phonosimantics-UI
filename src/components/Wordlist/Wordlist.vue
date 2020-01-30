@@ -1,5 +1,7 @@
 <template>
-  <WordlistItem></WordlistItem>
+  <div>
+    <WordlistItem></WordlistItem>
+  </div>
 </template>
 
 <script>

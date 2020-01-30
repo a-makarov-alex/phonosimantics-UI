@@ -1,7 +1,17 @@
 <template>
   <div class="wordlist-item">
-    <h4>Wordlist for "{{wordlist.meaning}}"</h4>
-    <button v-on:click="loadTableData(wordlist)">test</button>
+    <div class="wordlist-meaning">
+      <h4>Wordlist for "{{wordlist.meaning}}"</h4>
+
+      <div class="select-block">
+        <h4>Select meaning: </h4>
+        <select name="meaning" id="">
+          <option disabled value="">Select meaning</option>
+          <option v-for="meaning in meanings">{{meaning}}</option>
+        </select>
+      </div>
+      <!--<button v-on:click="loadTableData(wordlist)">test</button>-->
+    </div>
     <!-- it works as list!
     <ul
       v-for="word in wordlist.list"
@@ -20,8 +30,14 @@
         <th>Transcription</th>
       </tr>
       </thead>
-      <tbody id="tableBody">
 
+      <tbody id="tableBody">
+      <tr v-for="(word, index) in wordlist.list">
+        <td>{{index+1}}</td>
+        <td><a :href="getUrl(word.language.title)">{{word.language.title}}</a></td>
+        <td>{{word.graphicForm}}</td>
+        <td>{{word.transcription}}</td>
+      </tr>
       </tbody>
     </table>
   </div>
@@ -34,42 +50,23 @@
     name: "WordlistItem",
     computed: {
       wordlist() {
-        console.info(this.$store.state.wordlist);
         return this.$store.state.wordlist
+      },
+      meanings() {
+        return this.$store.state.meanings
       }
     },
     created() {
-      console.info("created");
       this.$store.dispatch('loadWordlist', this.$router.currentRoute.params);
+      this.$store.dispatch('loadMeanings')
     },
     methods: {
-      loadTableData(wordlist) {
-        const tableBody = document.getElementById('tableBody');
-        let dataHtml = '';
-        let counter = 1;
-
-        for (let word of wordlist.list) {
-          dataHtml += `<tr>`;
-          dataHtml += `<td>${counter}</td>`;
-          dataHtml += `<td><a href="http://localhost:8080/#/languages/${word.language.title}">${word.language.title}</a></td>`;
-          dataHtml += `<td>${word.graphicForm}</td>`;
-          dataHtml += `<td>${word.transcription}</td>`;
-          dataHtml += `</tr>`;
-          counter++;
-        }
-        tableBody.innerHTML = dataHtml;
+      getUrl(meaning) {
+        return "http://localhost:8080/#/languages/" + meaning;
       }
     }
   }
 
-  // window.onload = () => {
-  // old version
-  //   loadTableData(store.state.wordlist)
-  // };
-  //
-  // function loadTableData(wordlist) {
-  // code here
-  // }
 </script>
 
 <style scoped>
@@ -77,4 +74,26 @@
     list-style-type: none;
     padding: 0;
   }
+
+  select {
+    margin-left: auto;
+    margin-right: 10%;
+    margin-bottom: auto;
+    margin-top: auto;
+  }
+
+  .wordlist-meaning {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .select-block {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+
 </style>
