@@ -10,7 +10,7 @@
           <option v-for="meaning in meanings">{{meaning}}</option>
         </select>
       </div>
-      <!--<button v-on:click="loadTableData(wordlist)">test</button>-->
+      <!--<button v-on:click="loadTableData(wordlist)">show</button>-->
     </div>
     <!-- it works as list!
     <ul
@@ -34,7 +34,7 @@
       <tbody id="tableBody">
       <tr v-for="(word, index) in wordlist.list">
         <td>{{index+1}}</td>
-        <td><a :href="getUrl(word.language.title)">{{word.language.title}}</a></td>
+        <td><router-link :to="getUrl(word.language.title)">{{word.language.title}}</router-link></td>
         <td>{{word.graphicForm}}</td>
         <td>{{word.transcription}}</td>
       </tr>
@@ -61,8 +61,8 @@
       this.$store.dispatch('loadMeanings')
     },
     methods: {
-      getUrl(meaning) {
-        return "http://localhost:8080/#/languages/" + meaning;
+      getUrl(language) {
+        return "/languages/" + language;
       }
     }
   }

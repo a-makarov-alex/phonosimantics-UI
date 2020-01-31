@@ -1,22 +1,35 @@
 <template>
   <div>
+    <!-- <div>
+        <h2>{{getHorHeaders()}}</h2>
+        <h2>{{getVertHeaders()}}</h2>
+        <h2>{{getCellsForRow(2)}}</h2>
+    </div>-->
     <div>
-      <!-- <h2>{{getHorHeaders()}}</h2>
-       <h2>{{getVertHeaders()}}</h2>
-       <h2>{{getCellsForRow(2)}}</h2> -->
+      <table>
+        <thead>
+
+        </thead>
+
+        <tbody>
+        <tr v-for="vertHeader in getVertHeaders()">
+          <td
+            v-for="ph in getCellsForRow(vertHeader.y)"
+            :colspan="ph.width"
+            @click="hideSideMenu"
+          >
+            {{ph.value}}
+          </td>
+        </tr>
+        </tbody>
+      </table>
     </div>
 
-    <table>
-      <thead>
+    <div class="side-menu" v-if="sideMenuVisibility">
+      <i class="material-icons clear" @click="sideMenuVisibility=!sideMenuVisibility">clear</i>
+      <h2>side menu test</h2>
 
-      </thead>
-
-      <tbody>
-      <tr v-for="vertHeader in getVertHeaders()">
-        <td v-for="ph in getCellsForRow(vertHeader.y)" :colspan="ph.width">{{ph.value}}</td>
-      </tr>
-      </tbody>
-    </table>
+    </div>
 
   </div>
 </template>
@@ -26,6 +39,7 @@
     name: "Phonemes",
     data() {
       return {
+        sideMenuVisibility: false,
         listPh: [
           {x: 'A', y: '1', value: 'A1', width: '1'},
           {x: 'A', y: '2', value: 'A2', width: '1'},
@@ -78,14 +92,17 @@
             }
           }
         }
-
         return arr;
+      },
+      hideSideMenu() {
+        this.sideMenuVisibility = !this.sideMenuVisibility;
       }
     }
   }
 </script>
 
 <style scoped>
+  @import url("https://fonts.googleapis.com/icon?family=Material+Icons");
 
   table, td {
     border: 1px solid cadetblue;
@@ -93,8 +110,34 @@
   }
 
   td {
+    padding: 4px;
     font-size: 1.5em;
+    cursor: pointer;
+  }
 
+  td:hover {
+    background-color: cadetblue;
+  }
+
+  .side-menu {
+    height: 100%;
+    width: 160px;
+    position: fixed;
+    z-index: 1;
+    top: 56px; /*48 header + 8 body*/
+    right: 8px;
+    background-color: #eee;
+  }
+
+  .clear {
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+  }
+
+  .clear:hover {
+    color: burlywood;
   }
 
 </style>

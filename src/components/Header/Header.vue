@@ -8,7 +8,9 @@
 
       <transition name="fade">
         <ul v-if="show">
-          <li v-for="item in items"><a :href="item.url">{{item.title}}</a></li>
+          <li v-for="item in items">
+            <router-link :to="item.url">{{item.title}}</router-link>
+          </li>
         </ul>
       </transition>
     </nav>
@@ -24,10 +26,10 @@
       return {
         show: false,
         items: [
-          {title: 'Home', url: 'http://localhost:8080/#/wordlists/leaf'} ,
-          {title: 'Meanings', url: 'http://localhost:8080/#/meanings'} ,
-          {title: 'Normality', url: 'http://localhost:8080/#/normality'} ,
-          {title: 'Phonemes', url: 'http://localhost:8080/#/phonemes'}
+          {title: 'Home', url: '/wordlists/leaf'} ,
+          {title: 'Meanings', url: '/meanings'} ,
+          {title: 'Normality', url: '/normality'} ,
+          {title: 'Phonemes', url: '/phonemes'}
         ]
       }
     }
