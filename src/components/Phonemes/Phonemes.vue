@@ -23,10 +23,22 @@
 
         <tbody>
         <tr v-for="index in getHeadersRowsNum()">
+          <td></td>
           <td v-for="header in placeHeaders" v-if="header.row + 1 === index" :colspan="header.width">{{header.text}}</td>
         </tr>
-        </tbody>
+        <tr></tr>
 
+        <tr v-for="header in mannerHeaders">
+          <td>{{header.text}}</td>
+          <td
+            v-for="ph in allPhonemes"
+            v-if="ph.row === header.row"
+            @click="hideSideMenu"
+          >
+            {{ph.value}}
+          </td>
+        </tr>
+        </tbody>
       </table>
     </div>
 
@@ -45,6 +57,7 @@
     created() {
       this.$store.dispatch('loadAllPhonemes');
       this.$store.dispatch('loadPlaceHeaders');
+      this.$store.dispatch('loadMannerHeaders');
     },
     computed: {
       allPhonemes() {
@@ -52,67 +65,19 @@
       },
       placeHeaders() {
         return this.$store.state.headers;
+      },
+      mannerHeaders() {
+        return this.$store.state.bufHeaders;
       }
     },
     data() {
       return {
-        sideMenuVisibility: false,
-        listPh: [
-          {x: 'A', y: '1', value: 'A1', width: '1'},
-          {x: 'A', y: '2', value: 'A2', width: '1'},
-          {x: 'B', y: '2', value: 'B2+C2', width: '2'},
-          {x: 'B', y: '1', value: 'B1', width: '1'},
-          {x: 'C', y: '3', value: 'C3', width: '1'},
-          {x: 'B', y: '3', value: 'B3', width: '1'},
-          {x: 'C', y: '1', value: 'C1', width: '1'},
-          {x: 'A', y: '3', value: 'A3', width: '1'}
-        ]
+        sideMenuVisibility: false
       }
     },
     methods: {
-      getHorHeaders() {
-        let arr = [];
-        let set = new Set();
-
-        for (let i = 0; i < this.listPh.length; i++) {
-          let elem = this.listPh[i];
-          if (!set.has(elem.x)) {
-            set.add(elem.x);
-            arr.push(elem);
-          }
-        }
-        return arr;
-      },
       getHeadersRowsNum() {
         return this.placeHeaders[this.placeHeaders.length-1].row + 1;
-      },
-      getVertHeaders() {
-        let arr = [];
-        let set = new Set();
-
-        for (let i = 0; i < this.listPh.length; i++) {
-          let elem = this.listPh[i];
-          if (!set.has(elem.y)) {
-            set.add(elem.y);
-            arr.push(elem);
-          }
-        }
-        return arr;
-      },
-      getCellsForRow(y) {
-        let arr = [];
-        let horHeaders = this.getHorHeaders();
-
-        for (let i = 0; i < horHeaders.length; i++) {
-          let h = horHeaders[i];
-          for (let j = 0; j < this.listPh.length; j++) {
-            let ph = this.listPh[j];
-            if (ph.y == y && ph.x == h.x) {
-              arr.push(ph)
-            }
-          }
-        }
-        return arr;
       },
       hideSideMenu() {
         this.sideMenuVisibility = !this.sideMenuVisibility;

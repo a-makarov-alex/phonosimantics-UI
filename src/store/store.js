@@ -31,6 +31,15 @@ export const store = new Vuex.Store({
         height: ''
       }
     ],
+    bufHeaders: [
+      {
+        row: '',
+        column: '',
+        text: '',
+        width: '',
+        height: ''
+      }
+    ],
     wordlist: {},
     allPhonemes: [
       {
@@ -58,6 +67,9 @@ export const store = new Vuex.Store({
     },
     SAVE_ALL_PHONEMES(state, allPhonemes) {
       state.allPhonemes = allPhonemes
+    },
+    SAVE_BUF_HEADERS(state, bufHeaders) {
+      state.bufHeaders = bufHeaders
     }
   },
   actions: {
@@ -106,6 +118,13 @@ export const store = new Vuex.Store({
     loadPlaceHeaders({commit}) {
       Vue.axios.get('phonemes/headers/place').then(result => {
         commit('SAVE_HEADERS', result.data)
+      }).catch(error => {
+        throw new Error('API ${error}')
+      })
+    },
+    loadMannerHeaders({commit}) {
+      Vue.axios.get('phonemes/headers/manner').then(result => {
+        commit('SAVE_BUF_HEADERS', result.data)
       }).catch(error => {
         throw new Error('API ${error}')
       })
