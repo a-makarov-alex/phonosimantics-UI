@@ -31,8 +31,14 @@ export const store = new Vuex.Store({
         height: ''
       }
     ],
-    wordlist: {
-    }
+    wordlist: {},
+    allPhonemes: [
+      {
+        value: '',
+        row: '',
+        column: ''
+      }
+    ]
   },
   mutations: {
     SAVE_LANGUAGE(state, language) {
@@ -49,6 +55,9 @@ export const store = new Vuex.Store({
     },
     SAVE_WORDLIST(state, wordlist) {
       state.wordlist = wordlist
+    },
+    SAVE_ALL_PHONEMES(state, allPhonemes) {
+      state.allPhonemes = allPhonemes
     }
   },
   actions: {
@@ -75,20 +84,34 @@ export const store = new Vuex.Store({
     },
     loadWordlists({commit}) {
       Vue.axios.get('wordlists').then(result => {
-        commit('SAVE_WORDLISTS', result.data)
+        commit('SAVE_ALL_PHONEMES', result.data)
       }).catch(error => {
         throw new Error('API ${error}')
       })
     },
     loadWordlist({commit}, params) {
-      Vue.axios.get('wordlist/reduced', { params: params }).then(result => {
+      Vue.axios.get('wordlist/reduced', {params: params}).then(result => {
         commit('SAVE_WORDLIST', result.data)
+      }).catch(error => {
+        throw new Error('API ${error}')
+      })
+    },
+    loadAllPhonemes({commit}) {
+      Vue.axios.get('phonemes/coverage').then(result => {
+        commit('SAVE_ALL_PHONEMES', result.data);
+      }).catch(error => {
+        throw new Error('API ${error}')
+      })
+    },
+    loadPlaceHeaders({commit}) {
+      Vue.axios.get('phonemes/headers/place').then(result => {
+        commit('SAVE_HEADERS', result.data)
       }).catch(error => {
         throw new Error('API ${error}')
       })
     }
   },
-  computed : {
+  computed: {
     axiosParams() {
       const params = new URLSearchParams();
       params.append('meaning',);

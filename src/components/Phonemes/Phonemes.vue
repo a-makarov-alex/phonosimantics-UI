@@ -1,17 +1,15 @@
 <template>
   <div>
-    <!-- <div>
-        <h2>{{getHorHeaders()}}</h2>
-        <h2>{{getVertHeaders()}}</h2>
-        <h2>{{getCellsForRow(2)}}</h2>
-    </div>-->
+    <div>
+      <!-- <h2>{{allPhonemes}}</h2>-->
+    </div>
     <div>
       <table>
         <thead>
 
         </thead>
 
-        <tbody>
+        <!--<tbody>
         <tr v-for="vertHeader in getVertHeaders()">
           <td
             v-for="ph in getCellsForRow(vertHeader.y)"
@@ -21,7 +19,14 @@
             {{ph.value}}
           </td>
         </tr>
+        </tbody> -->
+
+        <tbody>
+        <tr v-for="index in getHeadersRowsNum()">
+          <td v-for="header in placeHeaders" v-if="header.row + 1 === index" :colspan="header.width">{{header.text}}</td>
+        </tr>
         </tbody>
+
       </table>
     </div>
 
@@ -37,6 +42,18 @@
 <script>
   export default {
     name: "Phonemes",
+    created() {
+      this.$store.dispatch('loadAllPhonemes');
+      this.$store.dispatch('loadPlaceHeaders');
+    },
+    computed: {
+      allPhonemes() {
+        return this.$store.state.allPhonemes;
+      },
+      placeHeaders() {
+        return this.$store.state.headers;
+      }
+    },
     data() {
       return {
         sideMenuVisibility: false,
@@ -65,6 +82,9 @@
           }
         }
         return arr;
+      },
+      getHeadersRowsNum() {
+        return this.placeHeaders[this.placeHeaders.length-1].row + 1;
       },
       getVertHeaders() {
         let arr = [];
@@ -111,7 +131,7 @@
 
   td {
     padding: 4px;
-    font-size: 1.5em;
+    font-size: 1.2em;
     cursor: pointer;
   }
 
