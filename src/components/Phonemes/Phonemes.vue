@@ -24,7 +24,13 @@
         <tbody>
         <tr v-for="index in getHeadersRowsNum()">
           <td></td>
-          <td v-for="header in placeHeaders" v-if="header.row + 1 === index" :colspan="header.width">{{header.text}}</td>
+          <td
+            v-for="header in placeHeaders"
+            v-if="header.row + 1 === index"
+            :colspan="header.width"
+          >
+            {{header.text}}
+          </td>
         </tr>
         <tr></tr>
 
@@ -34,6 +40,7 @@
             v-for="ph in allPhonemes"
             v-if="ph.row === header.row"
             @click="hideSideMenu"
+            v-bind:class="{recognized : ph.recognized}"
           >
             {{ph.value}}
           </td>
@@ -97,11 +104,6 @@
   td {
     padding: 4px;
     font-size: 1.2em;
-    cursor: pointer;
-  }
-
-  td:hover {
-    background-color: cadetblue;
   }
 
   .side-menu {
@@ -123,6 +125,15 @@
 
   .clear:hover {
     color: burlywood;
+  }
+
+  .recognized {
+    background-color: #7CFF67;
+    cursor: pointer;
+  }
+
+  .recognized:hover {
+    background-color: cadetblue;
   }
 
 </style>

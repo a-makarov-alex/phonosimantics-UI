@@ -45,7 +45,8 @@ export const store = new Vuex.Store({
       {
         value: '',
         row: '',
-        column: ''
+        column: '',
+        recognized: false
       }
     ]
   },
