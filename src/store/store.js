@@ -46,9 +46,16 @@ export const store = new Vuex.Store({
         value: '',
         row: '',
         column: '',
-        recognized: false
+        recognized: false,
+        distinctiveFeatures: {
+          majorClass: {},
+          manner: {},
+          place: {},
+          vowelSpace: {}
+        }
       }
-    ]
+    ],
+    generalFeatures: []
   },
   mutations: {
     SAVE_LANGUAGE(state, language) {
@@ -71,6 +78,9 @@ export const store = new Vuex.Store({
     },
     SAVE_BUF_HEADERS(state, bufHeaders) {
       state.bufHeaders = bufHeaders
+    },
+    SAVE_GENERAL_FEATURES(state, generalFeatures) {
+      state.generalFeatures = generalFeatures
     }
   },
   actions: {
@@ -126,6 +136,13 @@ export const store = new Vuex.Store({
     loadMannerHeaders({commit}) {
       Vue.axios.get('phonemes/headers/manner').then(result => {
         commit('SAVE_BUF_HEADERS', result.data)
+      }).catch(error => {
+        throw new Error('API ${error}')
+      })
+    },
+    loadGeneralDistinctiveFeatures({commit}) {
+      Vue.axios.get('phonemes/parameters/general').then(result => {
+        commit('SAVE_GENERAL_FEATURES', result.data)
       }).catch(error => {
         throw new Error('API ${error}')
       })
