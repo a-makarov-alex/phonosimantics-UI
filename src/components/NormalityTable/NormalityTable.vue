@@ -1,5 +1,5 @@
 <template>
-  <NormalityTableItem></NormalityTableItem>
+  <!--<NormalityTableItem></NormalityTableItem>-->
 </template>
 
 <script>

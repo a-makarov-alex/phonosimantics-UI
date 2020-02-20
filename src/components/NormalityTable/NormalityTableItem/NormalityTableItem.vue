@@ -41,7 +41,7 @@
       dataHtml += `<td colspan="${header.width}" rowspan="${header.height}">${header.text}</td>`;
     }
     dataHtml += `</tr>`;
-    tableHead.innerHTML = dataHtml;
+    //tableHead.innerHTML = dataHtml;
   }
 
 

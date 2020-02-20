@@ -12,6 +12,24 @@
         </select>
       </div>-->
 
+      <!--<div class="parameters meanings pair">
+        <div class="parameter meaning-1">
+          <label for="select-meaning-1">Meaning 1 (Green)</label>
+          <select name="" id="select-meaning-1" v-model="meaning1">
+            <option v-for="meaning in allMeanings" :value="meaning" >{{meaning}}</option>
+          </select>
+          <h4>{{meaning1}}</h4>
+        </div>
+
+        <div class="parameter meaning-2">
+          <label for="select-meaning-2">Meaning 2 (Red)</label>
+          <select name="" id="select-meaning-2" v-model="meaning2">
+            <option v-for="meaning in allMeanings" :value="meaning" >{{meaning}}</option>
+          </select>
+          <h4>{{meaning2}}</h4>
+        </div>
+      </div>
+
       <div class="box general">
         <label for="parameter-group general">GENERAL</label>
         <div class="parameter-group general" id="parameter-group general">
@@ -29,117 +47,92 @@
             </select>
           </div>
 
-          <div class="parameter container approximate">
-            <label for="p-approximate">Approximate</label>
-            <select name="p-approximate" id="p-approximate" v-model="gf.Approximate" multiple>
-              <option v-for="featureValue in generalFeatures.Approximate" :value="featureValue">{{featureValue}}
-              </option>
-            </select>
-          </div>
-
-          <div class="parameter container sonorant">
-            <label for="p-sonorant">Sonorant</label>
-            <select name="p-sonorant" id="p-sonorant" v-model="gf.Sonorant" multiple>
-              <option v-for="featureValue in generalFeatures.Sonorant" :value="featureValue">{{featureValue}}</option>
-            </select>
-          </div>
-
-          <div class="parameter container stricture">
-            <label for="p-stricture">Stricture</label>
-            <select name="p-stricture" id="p-stricture" v-model="gf.Stricture" multiple>
-              <option v-for="featureValue in generalFeatures.Stricture" :value="featureValue">{{featureValue}}</option>
-            </select>
-          </div>
-
-          <div class="parameter container vocoid">
-            <label for="p-vocoid">Vocoid</label>
-            <select name="p-vocoid" id="p-vocoid" v-model="gf.Vocoid" multiple>
-              <option v-for="featureValue in generalFeatures.Vocoid" :value="featureValue">{{featureValue}}</option>
-            </select>
-          </div>
-
-          <div class="parameter container manner">
-            <label for="p-manner">Manner</label>
-            <select name="p-manner" id="p-manner" v-model="gf.Manner" multiple>
-              <option v-for="featureValue in generalFeatures.Manner" :value="featureValue">{{featureValue}}</option>
-            </select>
-          </div>
-        </div>
-      </div>
-
-
-      <!--<div>
-        <article :id="id" class="article">
-          <div class="parameter container" v-for="(feature, key) in generalFeatures" :key="feature">
-            <label :for="feature">{{key}}</label>
-            <select name="key" id="key" v-model="selectedFeatures[key]" multiple>
-              <option v-for="featureValue in feature" :key="featureValue">{{featureValue}}</option>
-            </select>
-          </div>
-        </article>
-      </div>-->
-
-
       <div class="parameter place">
 
-      </div>
+      </div>-->
     </div>
 
     <!--<div class="list">
       <ul>
         <li v-for="ph in phList" v-if="(manner===ph.manner || manner==='') && (place===ph.place || place==='') && (voice===ph.voice || voice===null)">{{ph.value}}</li>
       </ul>
-    </div>-->
+    </div> -->
+
+    <div class="parameters parameter-container">
+      <div :class="'parameter ' + key" v-for="(feature,key) in generalFeatures" :key="feature">
+        <label :for="feature">{{key}}</label>
+        <select :name="key" :id="key" v-model="selectedFeatures[key]" multiple>
+          <option v-for="featureValue in feature" :key="featureValue">{{featureValue}}</option>
+        </select>
+      </div>
+    </div>
 
     <div>
-      <table>
-        <thead></thead>
-
-        <tbody>
-        <tr v-for="index in getHeadersRowsNum()">
-          <td></td>
-          <td
-            v-for="header in placeHeaders"
-            v-if="header.row + 1 === index"
-            :colspan="header.width"
-          >
-            {{header.text}}
-          </td>
-        </tr>
-        <tr></tr>
-
-        <tr v-for="header in mannerHeaders">
-          <td>{{header.text}}</td>
-          <td
-            v-for="ph in allPhonemes"
-            v-if="ph.row === header.row"
-            @click="hideSideMenu"
-            v-bind:class="{recognized : ph.recognized}"
-            :id="assignId(ph)"
-          >
-            <span v-if="shouldBeShown(ph.distinctiveFeatures)">{{ph.value}}</span>
-          </td>
-        </tr>
-        </tbody>
-      </table>
+      <h2>{{generalFeatures}}</h2>
+      <h2>{{selectedFeatures}}</h2>
     </div>
+
+      <div>
+        <table>
+          <thead></thead>
+
+          <tbody>
+          <tr v-for="index in getHeadersRowsNum()">
+            <td></td>
+            <td
+              v-for="header in placeHeaders"
+              v-if="header.row + 1 === index"
+              :colspan="header.width"
+            >
+              {{header.text}}
+            </td>
+          </tr>
+          <tr></tr>
+
+          <tr v-for="header in mannerHeaders">
+            <td>{{header.text}}</td>
+            <td
+              v-for="ph in allPhonemes"
+              v-if="ph.row === header.row"
+              @click="hideSideMenu"
+              v-bind:class="{recognized : ph.recognized}"
+              :id="assignId(ph)"
+            >
+              <!--<span v-if="shouldBeShown(ph.distinctiveFeatures)">{{ph.value}}</span> -->
+              <span v-if="shouldBeShown2(ph.distinctiveFeatures)">{{ph.value}}</span>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
 
     <div class="side-menu" v-if="sideMenuVisibility">
       <i class="material-icons clear" @click="sideMenuVisibility=!sideMenuVisibility">clear</i>
       <h2>side menu test</h2>
-
     </div>
 
   </div>
 </template>
 
 <script>
+  import Vue from "vue";
+  import VueAxios from "vue-axios";
+  import axios from "axios";
+  import {API_URL} from "../../../api/config";
+
+  Vue.use(VueAxios, axios)
+  Vue.axios.defaults.baseURL = API_URL
+  Vue.axios.defaults.headers.get['Access-Control-Allow-Origin'] = 'http://localhost:8080';
+
   export default {
     name: "Phonemes",
     created() {
       this.$store.dispatch('loadAllPhonemes');
       this.$store.dispatch('loadPlaceHeaders');
       this.$store.dispatch('loadMannerHeaders');
+      this.$store.dispatch('loadMeanings')
+      Vue.axios.get('phonemes/parameters/general').then(result => {
+          this.generalFeatures = result.data})
       this.$store.dispatch('loadGeneralDistinctiveFeatures')
     },
     computed: {
@@ -152,52 +145,62 @@
       mannerHeaders() {
         return this.$store.state.bufHeaders;
       },
-      generalFeatures() {
+      allMeanings() {
+        return this.$store.state.meanings;
+      },
+      gfeat() {
         return this.$store.state.generalFeatures;
       }
     },
     watch: {
-      generalFeatures: function (newFeatures) {
-        this.gf.Manner = this.$store.state.generalFeatures.Manner;
-        this.gf.Vocoid = this.$store.state.generalFeatures.Vocoid;
-        this.gf.Stricture = this.$store.state.generalFeatures.Stricture;
-        this.gf.Continuant = this.$store.state.generalFeatures.Continuant;
-        this.gf.Approximate = this.$store.state.generalFeatures.Approximate;
+      gfeat: function (newFeatures) {
+        this.selectedFeatures = Object.assign(
+          ...Object.keys(this.generalFeatures).map( key => ({
+            [key]: this.generalFeatures[key]}))
+        )
       }
     },
     data() {
       return {
-        fuckingHack: true,
-        sideMenuVisibility: false,
-        gf: {
-          Continuant: [],
-          Nasal: [],
-          Approximate: [],
-          Sonorant: [],
-          Stricture: [],
-          Vocoid: [],
-          Manner: []
-        },
-        phList: [
-          {value: "b", manner: "stop", place: "bilabial", voice: true},
-          {value: "t", manner: "stop", place: "alveolar", voice: false},
-          {value: "g", manner: "stop", place: "glottal", voice: true},
-          {value: "s", manner: "sibilant", place: "alveolar", voice: false}
-        ]
+        generalFeatures: [],
+        selectedFeatures: [],
+        meaning1: '',
+        meaning2: '',
+        sideMenuVisibility: false
       }
     },
     methods: {
-      shouldBeShown(phFeatures) {
+      shouldBeShown2(phFeatures) {
         if (phFeatures === null) {
           return false;
         }
-        /*for (let man=0; man<this.gf.Manner.length; man++) {
-          for (let voc = 0; voc < this.gf.Vocoid.length; voc++) {
-            if (phFeatures.manner.mannerPrecise === this.gf.Manner[man] && phFeatures.majorClass.vocoid === this.gf.Vocoid[voc]) {
-              return true;
+        let sf = this.selectedFeatures;
+
+        for (let property in sf) {
+          if (sf.hasOwnProperty(property)) {
+            for (let phSection in phFeatures) {
+              //console.info(phFeatures[phSection]);
+              if (phFeatures[phSection].hasOwnProperty(property.toLowerCase())) {
+                let sectionValue = phFeatures[phSection];
+                console.info(sf[property]);
+                console.info(String(sectionValue[property.toLowerCase()]));
+                if (sf[property].indexOf(String(sectionValue[property.toLowerCase()])) != -1) {
+                  //console.info(phoneme.value);
+                  //console.info(sf[property].indexOf(phoneme[property]));
+                } else {
+                  return false;
+                }
+              }
             }
           }
-        }*/
+        }
+        return true
+      },
+      /*shouldBeShown(phFeatures) {
+        if (phFeatures === null) {
+          return false;
+        }
+
         for (let man = 0; man < this.gf.Manner.length; man++) {
           let manPr = phFeatures.manner.mannerPrecise;
 
@@ -207,31 +210,31 @@
             for (let app = 0; app < this.gf.Approximate.length; app++) {
               let approx = phFeatures.majorClass.approximant;
 
-            for (let str = 0; str < this.gf.Stricture.length; str++) {
-              let strict = phFeatures.manner.stricture;
+              for (let str = 0; str < this.gf.Stricture.length; str++) {
+                let strict = phFeatures.manner.stricture;
 
-              for (let cont = 0; cont < this.gf.Continuant.length; cont++) {
-                let contin = phFeatures.manner.continuant;
+                for (let cont = 0; cont < this.gf.Continuant.length; cont++) {
+                  let contin = phFeatures.manner.continuant;
 
-                if (manPr === this.gf.Manner[man] || manPr === null) {
-                  if (String(vocoid) === String(this.gf.Vocoid[voc])) {
-                    if (String(approx) === String(this.gf.Approximate[app])) {
-                      if (strict === this.gf.Stricture[str] || strict === null) {
-                        if (String(contin) === String(this.gf.Continuant[cont]) || contin === null) {
-                          return true;
+                  if (manPr === this.gf.Manner[man] || manPr === null) {
+                    if (String(vocoid) === String(this.gf.Vocoid[voc])) {
+                      if (String(approx) === String(this.gf.Approximate[app])) {
+                        if (strict === this.gf.Stricture[str] || strict === null) {
+                          if (String(contin) === String(this.gf.Continuant[cont]) || contin === null) {
+                            return true;
+                          }
                         }
                       }
                     }
                   }
                 }
               }
-              }
             }
           }
         }
         return false;
       }
-      ,
+      ,*/
       getHeadersRowsNum() {
         return this.placeHeaders[this.placeHeaders.length - 1].row + 1;
       }
