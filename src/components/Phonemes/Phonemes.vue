@@ -28,27 +28,6 @@
           </select>
           <h4>{{meaning2}}</h4>
         </div>
-      </div>
-
-      <div class="box general">
-        <label for="parameter-group general">GENERAL</label>
-        <div class="parameter-group general" id="parameter-group general">
-          <div class="parameter container continuant">
-            <label for="p-continuant">Continuant</label>
-            <select name="p-continuant" id="p-continuant" v-model="gf.Continuant" multiple>
-              <option v-for="featureValue in generalFeatures.Continuant" :value="featureValue">{{featureValue}}</option>
-            </select>
-          </div>
-
-          <div class="parameter container nasal">
-            <label for="p-nasal">Nasal</label>
-            <select name="p-nasal" id="p-nasal" v-model="gf.Nasal" multiple>
-              <option v-for="featureValue in generalFeatures.Nasal" :value="featureValue">{{featureValue}}</option>
-            </select>
-          </div>
-
-      <div class="parameter place">
-
       </div>-->
     </div>
 
@@ -58,18 +37,29 @@
       </ul>
     </div> -->
 
-    <div class="parameters parameter-container">
-      <div :class="'parameter ' + key" v-for="(feature,key) in generalFeatures" :key="feature">
+    <label for="general-param">GENERAL</label>
+    <div class="parameters general" id="general-param">
+      <div :class="'parameter ' + key" v-for="(feature,key) in generalFeatures" :key="key">
         <label :for="feature">{{key}}</label>
-        <select :name="key" :id="key" v-model="selectedFeatures[key]" multiple>
+        <select :name="key" :id="key" v-model="selectedFeaturesGen[key]" multiple>
+          <option v-for="featureValue in feature" :key="featureValue">{{featureValue}}</option>
+        </select>
+      </div>
+    </div>
+
+    <label for="consonant-param">CONSONANT</label>
+    <div class="parameters consonant" id="consonant-param">
+      <div :class="'parameter ' + key" v-for="(feature,key) in consonantFeatures" :key="key">
+        <label :for="feature">{{key}}</label>
+        <select :name="key" :id="key" v-model="selectedFeaturesCons[key]" multiple>
           <option v-for="featureValue in feature" :key="featureValue">{{featureValue}}</option>
         </select>
       </div>
     </div>
 
     <div>
-      <h2>{{generalFeatures}}</h2>
-      <h2>{{selectedFeatures}}</h2>
+      <h2>{{consonantFeatures}}</h2>
+      <h2>{{selectedFeaturesCons}}</h2>
     </div>
 
       <div>
@@ -98,8 +88,7 @@
               v-bind:class="{recognized : ph.recognized}"
               :id="assignId(ph)"
             >
-              <!--<span v-if="shouldBeShown(ph.distinctiveFeatures)">{{ph.value}}</span> -->
-              <span v-if="shouldBeShown2(ph.distinctiveFeatures)">{{ph.value}}</span>
+              <span v-if="shouldBeShown(ph.distinctiveFeatures)">{{ph.value}}</span>
             </td>
           </tr>
           </tbody>
@@ -133,7 +122,10 @@
       this.$store.dispatch('loadMeanings')
       Vue.axios.get('phonemes/parameters/general').then(result => {
           this.generalFeatures = result.data})
+      Vue.axios.get('/phonemes/parameters/consonant').then(result => {
+        this.consonantFeatures = result.data})
       this.$store.dispatch('loadGeneralDistinctiveFeatures')
+      this.$store.dispatch('loadConsonantDistinctiveFeatures')
     },
     computed: {
       allPhonemes() {
@@ -150,43 +142,55 @@
       },
       gfeat() {
         return this.$store.state.generalFeatures;
+      },
+      cfeat() {
+        return this.$store.state.consonantFeatures;
       }
     },
     watch: {
       gfeat: function (newFeatures) {
-        this.selectedFeatures = Object.assign(
+        this.selectedFeaturesGen = Object.assign(
           ...Object.keys(this.generalFeatures).map( key => ({
             [key]: this.generalFeatures[key]}))
+        )
+      },
+      cfeat: function (newFeatures) {
+        this.selectedFeaturesCons = Object.assign(
+          ...Object.keys(this.consonantFeatures).map( key => ({
+            [key]: this.consonantFeatures[key]}))
         )
       }
     },
     data() {
       return {
         generalFeatures: [],
-        selectedFeatures: [],
+        consonantFeatures: [],
+        selectedFeaturesGen: [],
+        selectedFeaturesCons: [],
         meaning1: '',
         meaning2: '',
         sideMenuVisibility: false
       }
     },
     methods: {
-      shouldBeShown2(phFeatures) {
+      shouldBeShown(phFeatures) {
         if (phFeatures === null) {
           return false;
         }
-        let sf = this.selectedFeatures;
+        /* ********************** GENERAL FEATURES *****************************/
+        let sf = this.selectedFeaturesGen;
 
         for (let property in sf) {
           if (sf.hasOwnProperty(property)) {
             for (let phSection in phFeatures) {
-              //console.info(phFeatures[phSection]);
-              if (phFeatures[phSection].hasOwnProperty(property.toLowerCase())) {
+              if (phFeatures[phSection].hasOwnProperty(property)) {
                 let sectionValue = phFeatures[phSection];
-                console.info(sf[property]);
-                console.info(String(sectionValue[property.toLowerCase()]));
-                if (sf[property].indexOf(String(sectionValue[property.toLowerCase()])) != -1) {
-                  //console.info(phoneme.value);
-                  //console.info(sf[property].indexOf(phoneme[property]));
+
+                if (sf[property].indexOf(String(sectionValue[property])) != -1) {
+                  /*console.info(sf[property]);
+                  console.info(String(sectionValue[property]));
+                  console.info("============")*/
+                  break;
                 } else {
                   return false;
                 }
@@ -194,55 +198,38 @@
             }
           }
         }
-        return true
-      },
-      /*shouldBeShown(phFeatures) {
-        if (phFeatures === null) {
-          return false;
-        }
 
-        for (let man = 0; man < this.gf.Manner.length; man++) {
-          let manPr = phFeatures.manner.mannerPrecise;
+        /* ********************** CONSONANT FEATURES *****************************/
+        sf = this.selectedFeaturesCons;
 
-          for (let voc = 0; voc < this.gf.Vocoid.length; voc++) {
-            let vocoid = phFeatures.majorClass.vocoid;
+        for (let property in sf) {
+          if (sf.hasOwnProperty(property)) {
+            for (let phSection in phFeatures) {
+              if (phFeatures[phSection].hasOwnProperty(property)) {
+                let sectionValue = phFeatures[phSection];
 
-            for (let app = 0; app < this.gf.Approximate.length; app++) {
-              let approx = phFeatures.majorClass.approximant;
-
-              for (let str = 0; str < this.gf.Stricture.length; str++) {
-                let strict = phFeatures.manner.stricture;
-
-                for (let cont = 0; cont < this.gf.Continuant.length; cont++) {
-                  let contin = phFeatures.manner.continuant;
-
-                  if (manPr === this.gf.Manner[man] || manPr === null) {
-                    if (String(vocoid) === String(this.gf.Vocoid[voc])) {
-                      if (String(approx) === String(this.gf.Approximate[app])) {
-                        if (strict === this.gf.Stricture[str] || strict === null) {
-                          if (String(contin) === String(this.gf.Continuant[cont]) || contin === null) {
-                            return true;
-                          }
-                        }
-                      }
-                    }
-                  }
+                if (sf[property].indexOf(String(sectionValue[property])) != -1) {
+                  /*console.info(sf[property]);
+                  console.info(String(sectionValue[property]));
+                  console.info("============")*/
+                  break;
+                } else {
+                  return false;
                 }
               }
             }
           }
         }
-        return false;
-      }
-      ,*/
+
+
+        return true
+      },
       getHeadersRowsNum() {
         return this.placeHeaders[this.placeHeaders.length - 1].row + 1;
-      }
-      ,
+      },
       hideSideMenu() {
         this.sideMenuVisibility = !this.sideMenuVisibility;
-      }
-      ,
+      },
       assignId(phoneme) {
         return "id" + phoneme.row + "x" + phoneme.column;
       }

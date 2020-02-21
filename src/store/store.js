@@ -55,7 +55,8 @@ export const store = new Vuex.Store({
         }
       }
     ],
-    generalFeatures: []
+    generalFeatures: [],
+    consonantFeatures: []
   },
   mutations: {
     SAVE_LANGUAGE(state, language) {
@@ -81,6 +82,9 @@ export const store = new Vuex.Store({
     },
     SAVE_GENERAL_FEATURES(state, generalFeatures) {
       state.generalFeatures = generalFeatures
+    },
+    SAVE_CONSONANT_FEATURES(state, consonantFeatures) {
+      state.consonantFeatures = consonantFeatures
     }
   },
   actions: {
@@ -143,6 +147,13 @@ export const store = new Vuex.Store({
     loadGeneralDistinctiveFeatures({commit}) {
       Vue.axios.get('phonemes/parameters/general').then(result => {
         commit('SAVE_GENERAL_FEATURES', result.data)
+      }).catch(error => {
+        throw new Error('API ${error}')
+      })
+    },
+    loadConsonantDistinctiveFeatures({commit}) {
+      Vue.axios.get('phonemes/parameters/consonant').then(result => {
+        commit('SAVE_CONSONANT_FEATURES', result.data)
       }).catch(error => {
         throw new Error('API ${error}')
       })
