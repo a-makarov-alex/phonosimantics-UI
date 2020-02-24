@@ -1,16 +1,6 @@
 <template>
   <div>
     <div class="parameters">
-      <div class="parameter voicing">
-
-      </div>
-
-      <!--<div class="parameter-container continuant" v-for="(feature, key) in generalFeatures">
-        <label :for="key">{{key}}</label>
-        <select :name="key" :id="key" v-model="" multiple>
-          <option v-for="featureValue in feature" :value="featureValue">{{featureValue}}</option>
-        </select>
-      </div>-->
 
       <!--<div class="parameters meanings pair">
         <div class="parameter meaning-1">
@@ -57,43 +47,57 @@
       </div>
     </div>
 
-    <div>
-      <h2>{{consonantFeatures}}</h2>
-      <h2>{{selectedFeaturesCons}}</h2>
+    <label for="vowel-param">VOWEL</label>
+    <div class="parameters vowel" id="vowel-param">
+      <div :class="'parameter ' + key" v-for="(feature,key) in vowelFeatures" :key="key">
+        <label :for="feature">{{key}}</label>
+        <select :name="key" :id="key" v-model="selectedFeaturesVow[key]" multiple>
+          <option v-for="featureValue in feature" :key="featureValue">{{featureValue}}</option>
+        </select>
+      </div>
     </div>
 
-      <div>
-        <table>
-          <thead></thead>
+    <div>
+      <table class="consonant table">
+        <thead></thead>
 
-          <tbody>
-          <tr v-for="index in getHeadersRowsNum()">
-            <td></td>
-            <td
-              v-for="header in placeHeaders"
-              v-if="header.row + 1 === index"
-              :colspan="header.width"
-            >
-              {{header.text}}
-            </td>
-          </tr>
-          <tr></tr>
+        <tbody>
+        <tr v-for="index in getHeadersRowsNum()">
+          <td></td>
+          <td
+            v-for="header in placeHeaders"
+            v-if="header.row + 1 === index"
+            :colspan="header.width"
+          >
+            {{header.text}}
+          </td>
+        </tr>
+        <tr></tr>
 
-          <tr v-for="header in mannerHeaders">
-            <td>{{header.text}}</td>
-            <td
-              v-for="ph in allPhonemes"
-              v-if="ph.row === header.row"
-              @click="hideSideMenu"
-              v-bind:class="{recognized : ph.recognized}"
-              :id="assignId(ph)"
-            >
-              <span v-if="shouldBeShown(ph.distinctiveFeatures)">{{ph.value}}</span>
-            </td>
-          </tr>
-          </tbody>
-        </table>
-      </div>
+        <tr v-for="header in mannerHeaders">
+          <td>{{header.text}}</td>
+          <td
+            v-for="ph in allPhonemes"
+            v-if="ph.row === header.row"
+            @click="hideSideMenu"
+            v-bind:class="{recognized : ph.recognized}"
+            :id="assignId(ph)"
+          >
+            <span v-if="shouldBeShown(ph.distinctiveFeatures)">{{ph.value}}</span>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div>
+      <table class="vowel table">
+        <thead></thead>
+        <tbody>
+
+        </tbody>
+      </table>
+    </div>
 
     <div class="side-menu" v-if="sideMenuVisibility">
       <i class="material-icons clear" @click="sideMenuVisibility=!sideMenuVisibility">clear</i>
@@ -119,13 +123,19 @@
       this.$store.dispatch('loadAllPhonemes');
       this.$store.dispatch('loadPlaceHeaders');
       this.$store.dispatch('loadMannerHeaders');
-      this.$store.dispatch('loadMeanings')
+      this.$store.dispatch('loadMeanings');
       Vue.axios.get('phonemes/parameters/general').then(result => {
-          this.generalFeatures = result.data})
+        this.generalFeatures = result.data
+      });
       Vue.axios.get('/phonemes/parameters/consonant').then(result => {
-        this.consonantFeatures = result.data})
-      this.$store.dispatch('loadGeneralDistinctiveFeatures')
-      this.$store.dispatch('loadConsonantDistinctiveFeatures')
+        this.consonantFeatures = result.data
+      });
+      Vue.axios.get('/phonemes/parameters/vowel').then(result => {
+        this.vowelFeatures = result.data
+      });
+      this.$store.dispatch('loadGeneralDistinctiveFeatures');
+      this.$store.dispatch('loadConsonantDistinctiveFeatures');
+      this.$store.dispatch('loadVowelDistinctiveFeatures');
     },
     computed: {
       allPhonemes() {
@@ -145,19 +155,31 @@
       },
       cfeat() {
         return this.$store.state.consonantFeatures;
+      },
+      vfeat() {
+        return this.$store.state.vowelFeatures;
       }
     },
     watch: {
       gfeat: function (newFeatures) {
         this.selectedFeaturesGen = Object.assign(
-          ...Object.keys(this.generalFeatures).map( key => ({
-            [key]: this.generalFeatures[key]}))
+          ...Object.keys(this.generalFeatures).map(key => ({
+            [key]: this.generalFeatures[key]
+          }))
         )
       },
       cfeat: function (newFeatures) {
         this.selectedFeaturesCons = Object.assign(
-          ...Object.keys(this.consonantFeatures).map( key => ({
-            [key]: this.consonantFeatures[key]}))
+          ...Object.keys(this.consonantFeatures).map(key => ({
+            [key]: this.consonantFeatures[key]
+          }))
+        )
+      },
+      vfeat: function (newFeatures) {
+        this.selectedFeaturesVow = Object.assign(
+          ...Object.keys(this.vowelFeatures).map(key => ({
+            [key]: this.vowelFeatures[key]
+          }))
         )
       }
     },
@@ -165,8 +187,10 @@
       return {
         generalFeatures: [],
         consonantFeatures: [],
+        vowelFeatures: [],
         selectedFeaturesGen: [],
         selectedFeaturesCons: [],
+        selectedFeaturesVow: [],
         meaning1: '',
         meaning2: '',
         sideMenuVisibility: false
@@ -221,6 +245,27 @@
           }
         }
 
+        /* ********************** VOWEL FEATURES *****************************/
+        sf = this.selectedFeaturesVow;
+
+        for (let property in sf) {
+          if (sf.hasOwnProperty(property)) {
+            for (let phSection in phFeatures) {
+              if (phFeatures[phSection].hasOwnProperty(property)) {
+                let sectionValue = phFeatures[phSection];
+
+                if (sf[property].indexOf(String(sectionValue[property])) != -1) {
+                  /*console.info(sf[property]);
+                  console.info(String(sectionValue[property]));
+                  console.info("============")*/
+                  break;
+                } else {
+                  return false;
+                }
+              }
+            }
+          }
+        }
 
         return true
       },
