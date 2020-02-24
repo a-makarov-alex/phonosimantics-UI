@@ -62,7 +62,7 @@
         <thead></thead>
 
         <tbody>
-        <tr v-for="index in getHeadersRowsNum()">
+        <tr v-for="index in getHeadersRowsNumCons()">
           <td></td>
           <td
             v-for="header in placeHeaders"
@@ -77,7 +77,7 @@
         <tr v-for="header in mannerHeaders">
           <td>{{header.text}}</td>
           <td
-            v-for="ph in allPhonemes"
+            v-for="ph in allConsonants"
             v-if="ph.row === header.row"
             @click="hideSideMenu"
             v-bind:class="{recognized : ph.recognized}"
@@ -93,8 +93,32 @@
     <div>
       <table class="vowel table">
         <thead></thead>
-        <tbody>
 
+        <tbody>
+        <tr v-for="index in getHeadersRowsNumVow()">
+          <td></td>
+          <td
+            v-for="header in backnessHeaders"
+            v-if="header.row + 1 === index"
+            :colspan="header.width"
+          >
+            {{header.text}}
+          </td>
+        </tr>
+        <tr></tr>
+
+        <tr v-for="header in heightHeaders">
+          <td>{{header.text}}</td>
+          <td
+            v-for="ph in allVowels"
+            v-if="ph.row === header.row"
+            @click="hideSideMenu"
+            v-bind:class="{recognized : ph.recognized}"
+            :id="assignId(ph)"
+          >
+            <span v-if="shouldBeShown(ph.distinctiveFeatures)">{{ph.value}}</span>
+          </td>
+        </tr>
         </tbody>
       </table>
     </div>
@@ -120,9 +144,12 @@
   export default {
     name: "Phonemes",
     created() {
-      this.$store.dispatch('loadAllPhonemes');
+      this.$store.dispatch('loadAllConsonants');
+      this.$store.dispatch('loadAllVowels');
       this.$store.dispatch('loadPlaceHeaders');
       this.$store.dispatch('loadMannerHeaders');
+      this.$store.dispatch('loadBacknessHeaders');
+      this.$store.dispatch('loadHeightHeaders');
       this.$store.dispatch('loadMeanings');
       Vue.axios.get('phonemes/parameters/general').then(result => {
         this.generalFeatures = result.data
@@ -138,14 +165,23 @@
       this.$store.dispatch('loadVowelDistinctiveFeatures');
     },
     computed: {
-      allPhonemes() {
-        return this.$store.state.allPhonemes;
+      allConsonants() {
+        return this.$store.state.allConsonants;
+      },
+      allVowels() {
+        return this.$store.state.allVowels;
       },
       placeHeaders() {
         return this.$store.state.headers;
       },
       mannerHeaders() {
         return this.$store.state.bufHeaders;
+      },
+      backnessHeaders() {
+        return this.$store.state.backnessHeaders;
+      },
+      heightHeaders() {
+        return this.$store.state.heightHeaders;
       },
       allMeanings() {
         return this.$store.state.meanings;
@@ -269,8 +305,11 @@
 
         return true
       },
-      getHeadersRowsNum() {
+      getHeadersRowsNumCons() {
         return this.placeHeaders[this.placeHeaders.length - 1].row + 1;
+      },
+      getHeadersRowsNumVow() {
+        return this.backnessHeaders[this.backnessHeaders.length - 1].row + 1;
       },
       hideSideMenu() {
         this.sideMenuVisibility = !this.sideMenuVisibility;

@@ -31,17 +31,25 @@ export const store = new Vuex.Store({
         height: ''
       }
     ],
-    bufHeaders: [
+    bufHeaders: [],
+    backnessHeaders: [],
+    heightHeaders: [],
+    wordlist: {},
+    allConsonants: [
       {
+        value: '',
         row: '',
         column: '',
-        text: '',
-        width: '',
-        height: ''
+        recognized: false,
+        distinctiveFeatures: {
+          majorClass: {},
+          manner: {},
+          place: {},
+          vowelSpace: {}
+        }
       }
     ],
-    wordlist: {},
-    allPhonemes: [
+    allVowels: [
       {
         value: '',
         row: '',
@@ -75,11 +83,20 @@ export const store = new Vuex.Store({
     SAVE_WORDLIST(state, wordlist) {
       state.wordlist = wordlist
     },
-    SAVE_ALL_PHONEMES(state, allPhonemes) {
-      state.allPhonemes = allPhonemes
+    SAVE_ALL_CONSONANTS(state, allConsonants) {
+      state.allConsonants = allConsonants
+    },
+    SAVE_ALL_VOWELS(state, allVowels) {
+      state.allVowels = allVowels
     },
     SAVE_BUF_HEADERS(state, bufHeaders) {
       state.bufHeaders = bufHeaders
+    },
+    SAVE_BACKNESS_HEADERS(state, backnessHeaders) {
+      state.backnessHeaders = backnessHeaders
+    },
+    SAVE_HEIGHT_HEADERS(state, heightHeaders) {
+      state.heightHeaders = heightHeaders
     },
     SAVE_GENERAL_FEATURES(state, generalFeatures) {
       state.generalFeatures = generalFeatures
@@ -127,9 +144,16 @@ export const store = new Vuex.Store({
         throw new Error('API ${error}')
       })
     },
-    loadAllPhonemes({commit}) {
+    loadAllConsonants({commit}) {
       Vue.axios.get('phonemes/coverage').then(result => {
-        commit('SAVE_ALL_PHONEMES', result.data);
+        commit('SAVE_ALL_CONSONANTS', result.data);
+      }).catch(error => {
+        throw new Error('API ${error}')
+      })
+    },
+    loadAllVowels({commit}) {
+      Vue.axios.get('phonemes/coverage/vowels').then(result => {
+        commit('SAVE_ALL_VOWELS', result.data);
       }).catch(error => {
         throw new Error('API ${error}')
       })
@@ -144,6 +168,20 @@ export const store = new Vuex.Store({
     loadMannerHeaders({commit}) {
       Vue.axios.get('phonemes/headers/manner').then(result => {
         commit('SAVE_BUF_HEADERS', result.data)
+      }).catch(error => {
+        throw new Error('API ${error}')
+      })
+    },
+    loadBacknessHeaders({commit}) {
+      Vue.axios.get('phonemes/headers/backness').then(result => {
+        commit('SAVE_BACKNESS_HEADERS', result.data)
+      }).catch(error => {
+        throw new Error('API ${error}')
+      })
+    },
+    loadHeightHeaders({commit}) {
+      Vue.axios.get('phonemes/headers/height').then(result => {
+        commit('SAVE_HEIGHT_HEADERS', result.data)
       }).catch(error => {
         throw new Error('API ${error}')
       })
