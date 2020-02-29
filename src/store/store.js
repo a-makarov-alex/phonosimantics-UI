@@ -145,14 +145,14 @@ export const store = new Vuex.Store({
       })
     },
     loadAllConsonants({commit}) {
-      Vue.axios.get('phonemes/coverage').then(result => {
+      Vue.axios.get('phonemes/table/consonant').then(result => {
         commit('SAVE_ALL_CONSONANTS', result.data);
       }).catch(error => {
         throw new Error('API ${error}')
       })
     },
     loadAllVowels({commit}) {
-      Vue.axios.get('phonemes/coverage/vowels').then(result => {
+      Vue.axios.get('phonemes/table/vowel').then(result => {
         commit('SAVE_ALL_VOWELS', result.data);
       }).catch(error => {
         throw new Error('API ${error}')
