@@ -187,21 +187,21 @@ export const store = new Vuex.Store({
       })
     },
     loadGeneralDistinctiveFeatures({commit}) {
-      Vue.axios.get('phonemes/parameters/general').then(result => {
+      Vue.axios.get('features/general').then(result => {
         commit('SAVE_GENERAL_FEATURES', result.data)
       }).catch(error => {
         throw new Error('API ${error}')
       })
     },
     loadConsonantDistinctiveFeatures({commit}) {
-      Vue.axios.get('phonemes/parameters/consonant').then(result => {
+      Vue.axios.get('features/consonant').then(result => {
         commit('SAVE_CONSONANT_FEATURES', result.data)
       }).catch(error => {
         throw new Error('API ${error}')
       })
     },
     loadVowelDistinctiveFeatures({commit}) {
-      Vue.axios.get('phonemes/parameters/vowel').then(result => {
+      Vue.axios.get('features/vowel').then(result => {
         commit('SAVE_VOWEL_FEATURES', result.data)
       }).catch(error => {
         throw new Error('API ${error}')

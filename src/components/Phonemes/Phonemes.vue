@@ -151,13 +151,13 @@
       this.$store.dispatch('loadBacknessHeaders');
       this.$store.dispatch('loadHeightHeaders');
       this.$store.dispatch('loadMeanings');
-      Vue.axios.get('phonemes/parameters/general').then(result => {
+      Vue.axios.get('/features/general').then(result => {
         this.generalFeatures = result.data
       });
-      Vue.axios.get('/phonemes/parameters/consonant').then(result => {
+      Vue.axios.get('/features/consonant').then(result => {
         this.consonantFeatures = result.data
       });
-      Vue.axios.get('/phonemes/parameters/vowel').then(result => {
+      Vue.axios.get('/features/vowel').then(result => {
         this.vowelFeatures = result.data
       });
       this.$store.dispatch('loadGeneralDistinctiveFeatures');
@@ -396,3 +396,4 @@
   }
 
 </style>
+
