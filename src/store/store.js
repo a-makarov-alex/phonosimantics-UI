@@ -138,7 +138,7 @@ export const store = new Vuex.Store({
       })
     },
     loadWordlist({commit}, params) {
-      Vue.axios.get('wordlist/reduced', {params: params}).then(result => {
+      Vue.axios.get('wordlist', {params: params}).then(result => {
         commit('SAVE_WORDLIST', result.data)
       }).catch(error => {
         throw new Error('API ${error}')
@@ -187,21 +187,21 @@ export const store = new Vuex.Store({
       })
     },
     loadGeneralDistinctiveFeatures({commit}) {
-      Vue.axios.get('features/general').then(result => {
+      Vue.axios.get('features/general/structure').then(result => {
         commit('SAVE_GENERAL_FEATURES', result.data)
       }).catch(error => {
         throw new Error('API ${error}')
       })
     },
     loadConsonantDistinctiveFeatures({commit}) {
-      Vue.axios.get('features/consonant').then(result => {
+      Vue.axios.get('features/consonant/structure').then(result => {
         commit('SAVE_CONSONANT_FEATURES', result.data)
       }).catch(error => {
         throw new Error('API ${error}')
       })
     },
     loadVowelDistinctiveFeatures({commit}) {
-      Vue.axios.get('features/vowel').then(result => {
+      Vue.axios.get('features/vowel/structure').then(result => {
         commit('SAVE_VOWEL_FEATURES', result.data)
       }).catch(error => {
         throw new Error('API ${error}')

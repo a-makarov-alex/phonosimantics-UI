@@ -151,13 +151,13 @@
       this.$store.dispatch('loadBacknessHeaders');
       this.$store.dispatch('loadHeightHeaders');
       this.$store.dispatch('loadMeanings');
-      Vue.axios.get('/features/general').then(result => {
+      Vue.axios.get('/features/general/structure').then(result => {
         this.generalFeatures = result.data
       });
-      Vue.axios.get('/features/consonant').then(result => {
+      Vue.axios.get('/features/consonant/structure').then(result => {
         this.consonantFeatures = result.data
       });
-      Vue.axios.get('/features/vowel').then(result => {
+      Vue.axios.get('/features/vowel/structure').then(result => {
         this.vowelFeatures = result.data
       });
       this.$store.dispatch('loadGeneralDistinctiveFeatures');
@@ -309,6 +309,7 @@
         return this.placeHeaders[this.placeHeaders.length - 1].row + 1;
       },
       getHeadersRowsNumVow() {
+        // TODO это вообще что? замена на "return 2" никак не поменяла UI
         return this.backnessHeaders[this.backnessHeaders.length - 1].row + 1;
       },
       hideSideMenu() {
