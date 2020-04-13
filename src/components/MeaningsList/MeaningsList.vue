@@ -4,9 +4,9 @@
     <div class="meanings">
       <MeaningsListItem></MeaningsListItem>
     </div>
-    <div>
+    <!-- <div>
       <h1>{{ this.$store.state.language }}</h1>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -18,14 +18,9 @@
     components: {
       MeaningsListItem
     },
-    // computed: {
-    //   meanings() {
-    //     return this.$store.state.meanings
-    //   }
-    // },
     created() {
-      this.$store.dispatch('loadLanguage')
-      //this.$store.dispatch('loadMeanings')
+      //this.$store.dispatch('loadLanguage')
+      this.$store.dispatch('loadMeanings')
     }
   }
 </script>
