@@ -5,7 +5,7 @@
         <label for="featureParam">Select feature:</label>
         <select name="featureParam" id="featureParam" v-model="selectedFeature">
           <option disabled value="">Select feature</option>
-          <option v-for="(feature, key) in features" :value="feature">{{key}}</option>
+          <option v-for="(feature, key) in features" :value="key">{{key}}</option>
         </select>
       </div>
 
@@ -13,34 +13,43 @@
         <label for="statsParam">Select stats param:</label>
         <select name="statsParam" id="statsParam" v-model="selectedStatsParam">
           <option disabled value="">Select stats param</option>
-          <option>% of all phonemes</option>
-          <option>% of words with feature</option>
-          <option>average feature num per word</option>
+          <option v-for="value in statsOptions">{{value}}</option>
         </select>
       </div>
     </div>
 
-    <h4>{{statsForAllWordlists.meaning}}</h4>
-
     <div class="meanings-list">
       <ul class="meanings-list meanings">
         <li class="meanings-list meaning-item"
-            v-for="meaning in meanings"
-            :key="meaning.title"
+            v-for="(feature, key, index) in statsForAllWordlists"
         >
-          <div class="long_block">
-            <div class="short_block meaning">
-              <h3>{{ meaning }}</h3>
+          <div class="long-block"
+               v-if="index===0"
+          >
+            <div class="short-block meaning">
+              <h3>Meaning</h3>
             </div>
 
-            <div class="short_block words">
+            <div class="short-block words"
+                 v-for="(inFeature, inKey) in feature"
+            >
+              <h3>{{inKey}}</h3>
+            </div>
+          </div>
 
+          <div class="long-block"
+               v-if="selectedStatsParam!==''"
+          >
+            <div class="short-block meaning">
+              <h3>{{ key }}</h3>
             </div>
 
-            <div class="short_block stats"
-            v-for="">
-
+            <div class="short-block words"
+                 v-for="(inFeature, inKey) in feature"
+            >
+              <h3>{{getCertainTypeOfStats(inFeature)}}</h3>
             </div>
+
           </div>
         </li>
       </ul>
@@ -63,11 +72,18 @@
     data() {
       return {
         features: [],
-        selectedFeature: 'vocoid',
+        selectedFeature: '',
         selectedStatsParam: '',
-        statsForAllWordlists: {
-          meaning: {
-            featureValue: {
+        statsForAllWordlists: [],
+        statsOptions: [
+          "% of all phonemes",
+          "% of words with feature",
+          "average feature num per word"
+        ]
+
+      /*{
+        meaning: {
+          featureValue: {
               percentOfAllPhonemes: '',
               percentOfWordsWithFeature: '',
               averageFeatureInstancesPerWord: '',
@@ -75,9 +91,10 @@
               numWordsWithFeature: '',
               numAllPhonemes: '',
               numAllWords: ''
-            }
           }
         }
+      }*/
+
       }
     },
     computed: {
@@ -90,11 +107,41 @@
       Vue.axios.get('/features/all/structure').then(result => {
         this.features = result.data
       });
-      if (this.selectedFeature != '') {
+      /*if (this.selectedFeature != '') {
         console.info("selectedFeature: " + this.selectedFeature);
         Vue.axios.get('/wordlists/features/' + this.selectedFeature + '/stats').then(result => {
           this.statsForAllWordlists = result.data
         });
+      }*/
+    },
+    watch: {
+      selectedFeature: function () {
+        Vue.axios.get('/wordlists/features/' + this.selectedFeature + '/stats').then(result => {
+          this.statsForAllWordlists = result.data;
+        });
+      }
+    },
+    methods: {
+      getCertainTypeOfStats(inFeature) {
+        let result = '';
+        switch (this.selectedStatsParam) {
+          case this.statsOptions[0]: {
+            result = (Number(inFeature.percentOfAllPhonemes) * 100).toFixed(1) + "%";
+            break;
+          }
+          case this.statsOptions[1]: {
+            result = (Number(inFeature.percentOfWordsWithFeature) * 100).toFixed(1) + "%";
+            break;
+          }
+          case this.statsOptions[2]: {
+            result = (Number(inFeature.averageFeatureInstancesPerWord)).toFixed(1);
+            break;
+          }
+          default: {
+            console.info("Stats type is invalid: " + this.selectedStatsParam)
+          }
+        }
+        return result;
       }
     }
   }
@@ -110,6 +157,21 @@
   }
 
   .parameter {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 2px 10px;
+  }
+
+  .long-block {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    border: 1px solid cadetblue;
+  }
+
+  .short-block {
     display: flex;
     flex-direction: column;
     justify-content: center;
